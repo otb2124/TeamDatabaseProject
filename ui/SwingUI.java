@@ -26,9 +26,6 @@ public class SwingUI {
         // Create the login panel
         createLoginPanel();
 
-        // Add login panel to the window initially
-        window.add(loginPanel, BorderLayout.CENTER);
-
         window.pack();
         window.setLocationRelativeTo(null); // Center the window
         window.setVisible(true);
@@ -94,6 +91,12 @@ public class SwingUI {
                 createSignUpPanel();
             }
         });
+
+
+        window.getContentPane().removeAll();
+        window.getContentPane().add(loginPanel, BorderLayout.CENTER);
+        window.revalidate();
+        window.repaint();
     }
     
     private void createSignUpPanel() {
@@ -138,8 +141,8 @@ public class SwingUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Switch back to the login UI
-                window.getContentPane().removeAll();
-                createLoginPanel(); // Re-create the login panel
+                window.getContentPane().remove(signUpPanel);
+                createLoginPanel();
             }
         });
     
