@@ -1,6 +1,4 @@
 import java.awt.Dimension;
-
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,14 +18,12 @@ public class HomeComponent implements Component{
         JPanel postsPanel = new JPanel();
         postsPanel.setLayout(null);
 
-        postsPanel.setPreferredSize(new Dimension(315, 800));
+        postsPanel.setPreferredSize(new Dimension(315, 2000));
 
         homePage = new JScrollPane();
         homePage.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         homePage.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         homePage.setViewportView(postsPanel);
-
-        addPost(0, im.getImgs(), "Orest", "otb2124", "Hello! \nBlahBlagBlahBlah\nBlaBla\nBlBlBlBlBlB", "1/4/2024", "5");
 
     }
 
@@ -38,15 +34,16 @@ public class HomeComponent implements Component{
     }
 
 
-    public void addPost(int y, ImageIcon[] icons, String fullName, String userName, String description, String date, String commentNumber){
-        
+    public void addPost(String fullName, String title, String description) {
         JPanel postspanel = (JPanel) homePage.getViewport().getView();
 
-        postspanel.add(new PostComponent(y, icons, fullName, userName, description, date, commentNumber)
-        .getComponent());
+        int y = postspanel.getComponentCount() * 200;
 
+        postspanel.add(new PostComponent(y, im.getImgs()[4], fullName, title, description).getComponent());
+    
         homePage.setViewportView(postspanel);
-        
     }
+
+    
 
 }

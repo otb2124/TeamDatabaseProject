@@ -6,11 +6,11 @@ import java.awt.Component;
 
 public class UtilityManager {
     
+    private ActionListener al;
 
 
-
-    public UtilityManager() {
-
+    public UtilityManager(ActionListener al) {
+        this.al = al;
     }
 
 
@@ -39,6 +39,44 @@ public class UtilityManager {
         errorDialog.setLocationRelativeTo(parentFrame);
         errorDialog.setVisible(true);
     }
+
+
+
+    public JDialog AddPost(JFrame window) {
+        JDialog addPostDialog = new JDialog(window, "Add Post", true);
+    
+        // Components
+        JLabel titleLabel = new JLabel("Title:");
+        JTextField titleField = new JTextField(20);
+        JLabel descriptionLabel = new JLabel("Description:");
+        JTextArea descriptionArea = new JTextArea(5, 20);
+        JButton addButton = new JButton("Add");
+    
+        // Button ActionListener
+        addButton.addActionListener(al);
+    
+        // Layout
+        JPanel contentPanel = new JPanel(new BorderLayout(10, 10));
+        JPanel inputPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+    
+        inputPanel.add(titleLabel);
+        inputPanel.add(titleField);
+        inputPanel.add(descriptionLabel);
+        inputPanel.add(descriptionArea);
+    
+        contentPanel.add(inputPanel, BorderLayout.CENTER);
+        contentPanel.add(addButton, BorderLayout.SOUTH);
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    
+        addPostDialog.setContentPane(contentPanel);
+        addPostDialog.pack();
+        addPostDialog.setLocationRelativeTo(window);
+        addPostDialog.setSize(300, 140);
+        addPostDialog.setVisible(true);
+
+        return addPostDialog;
+    }
+    
 
 
 

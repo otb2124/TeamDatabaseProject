@@ -1,9 +1,11 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,7 +19,7 @@ public class SearchComponent implements Component{
     private ImageManager im;
 
 
-    public SearchComponent(ImageManager im) {
+    public SearchComponent(ImageManager im, ActionListener al) {
 
         this.im = im;
 
@@ -33,10 +35,16 @@ public class SearchComponent implements Component{
         JPanel searchBarPanel = new JPanel(new BorderLayout());
         searchBarPanel.add(searchBarPanelLeft, BorderLayout.WEST);
 
-        JLabel recentLabel = new JLabel("Recent");
-        recentLabel.setFont(im.createCustomFont(16, "Roboto-Bold.ttf"));
+        //JLabel recentLabel = new JLabel("Recent");
+        //recentLabel.setFont(im.createCustomFont(16, "Roboto-Bold.ttf"));
 
-        searchBarPanel.add(recentLabel, BorderLayout.SOUTH);
+        //searchBarPanel.add(recentLabel, BorderLayout.SOUTH);
+
+        JButton searchButton = new JButton("Search");
+        searchButton.addActionListener(al);
+        searchButton.setPreferredSize(new Dimension(100, 30)); // Set fixed size for the login button
+        searchBarPanel.add(searchButton, BorderLayout.SOUTH);
+        
         searchBarPanel.add(txtf);
 
         searchBarPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
@@ -56,18 +64,24 @@ public class SearchComponent implements Component{
         searchPage.add(searchBarPanel, BorderLayout.NORTH);
         searchPage.add(recentScroll, BorderLayout.SOUTH);
 
-
-        addRecent(0, im.getImgs(), "Orest Brukhal", "otb2324");
-        addRecent(60, im.getImgs(), "Orest Brukhal", "otb2324");
-        addRecent(120, im.getImgs(), "Orest Brukhal", "otb2324");
-        addRecent(180, im.getImgs(), "Orest Brukhal", "otb2324");
-
     }
 
     @Override
     public JComponent getComponent() {
 
         return searchPage;
+    }
+
+
+
+    public String getSearchBarString(){
+
+        String textf = "null";
+
+        JPanel searchBarPanel = (JPanel) searchPage.getComponent(0);
+        textf = ((RoundedCornerTextField) searchBarPanel.getComponent(2)).getText();
+
+        return textf;
     }
 
 

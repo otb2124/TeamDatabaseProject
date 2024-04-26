@@ -15,16 +15,19 @@ public class LoginComponent implements Component {
     private JPanel loginPanel;
     private ImageManager im;
 
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+
     public LoginComponent(ImageManager im, ActionListener listener) {
 
         loginPanel = new JPanel(new BorderLayout());
 
         // Add components to the login panel
-        JLabel usernameLabel = new JLabel("Username:");
-        JTextField usernameField = new JTextField(20);
+        JLabel usernameLabel = new JLabel("Email:");
+        usernameField = new JTextField(20);
         usernameField.setPreferredSize(new Dimension(200, 30)); // Set fixed size for the username field
         JLabel passwordLabel = new JLabel("Password:");
-        JPasswordField passwordField = new JPasswordField(20);
+        passwordField = new JPasswordField(20);
         passwordField.setPreferredSize(new Dimension(200, 30)); // Set fixed size for the password field
         JButton loginButton = new JButton("Login");
         loginButton.setPreferredSize(new Dimension(100, 30)); // Set fixed size for the login button
@@ -52,4 +55,5 @@ public class LoginComponent implements Component {
     public JComponent getComponent() {
         return loginPanel;
     }
+
 }
