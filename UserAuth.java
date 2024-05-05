@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -103,7 +105,7 @@ public class UserAuth {
                 }
             }
 
-            conn.commit(); // Commit the transaction
+            
             return true; // Signup successful
         } catch (SQLException e) {
             if (conn != null) {
@@ -127,6 +129,105 @@ public class UserAuth {
     }
     
     private static int getNextFacultyId() {
+        String sql = "SELECT MAX(id) AS maxId FROM faculty";
+        int maxId = 0;
+
+        try (Connection conn = DB2Connection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                maxId = rs.getInt("maxId");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return maxId + 1; // Return the next available ID
+    }
+    
+    public static Integer getFacultyIdByFName(String fName) {
+        Integer facultyId = null; 
+        String query = "SELECT id FROM users WHERE FName = ?"; 
+
+  
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(query)) {
+        	ps.setString(1, fName); 
+            ResultSet rs = ps.executeQuery(); 
+
+            if (rs.next()) { 
+                facultyId = rs.getInt("id"); 
+            }
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
+
+        return facultyId; 
+    }
+    
+    public static boolean insertPaper(int id, String title, String abstractText) {
+        
+        String query = "INSERT INTO papers (id, title, abstract) VALUES (?, ?, ?)";
+        
+        boolean success = false; 
+
+        
+        try (Connection conn = DB2Connection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setInt(1, id); 
+            ps.setString(2, title); 
+            ps.setString(3, abstractText); 
+            
+            int rowsAffected = ps.executeUpdate(); 
+            
+            if (rowsAffected > 0) { 
+                success = true;
+            }
+
+        } catch (SQLException e) { 
+            e.printStackTrace(); 
+        }
+
+        return success; 
+    }
+    
+    public static List<PaperInfo> searchByKeyword(String keyword) {
+        List<PaperInfo> results = new ArrayList<>(); 
+
+        
+        String query = "SELECT f.fName, f.lName, p.title, p.abstract " +
+                       "FROM papers p " +
+                       "JOIN paper_keywords pk ON p.id = pk.id " +
+                       "JOIN authorship a ON p.id = a.paperId " +
+                       "JOIN faculty f ON a.facultyId = f.id " +
+                       "WHERE pk.keyword = ?";
+
+        
+        try (Connection conn = DB2Connection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setString(1, keyword); 
+            ResultSet rs = ps.executeQuery(); 
+
+            
+            while (rs.next()) {
+                String author = rs.getString("fName") + " " + rs.getString("lName");
+                String title = rs.getString("title");
+                String abstractText = rs.getString("abstract");
+
+                
+                results.add(new PaperInfo(author, title, abstractText));
+            }
+
+        } catch (SQLException e) {
+            e.fillInStackTrace(); 
+        }
+
+        return results; 
+    }
+    
+    private static int getId(String Name) {
         String sql = "SELECT MAX(id) AS maxId FROM faculty";
         int maxId = 0;
 
